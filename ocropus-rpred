@@ -1,0 +1,54 @@
+#!/usr/bin/python
+import sys
+sys.path.insert(0, "ocrolib")
+import argparse
+import cv2
+import utils
+from ocrolib import lstm
+
+import pdb
+# pdb.set_trace()
+
+parser = argparse.ArgumentParser("apply an RNN recognizer")
+# recognition
+parser.add_argument('-m','--model',
+                    help="line recognition model")
+parser.add_argument("-p","--pad",default=16,type=int,
+                    help="extra blank padding to the left and right of text line")
+# input files
+parser.add_argument("files",nargs="+",
+                    help="input files; glob and @ expansion performed")
+args = parser.parse_args()
+
+import numpy as np
+meanStdInfo = np.load("model/raw-default-MEAN-STD.bin.npz")
+MEAN = meanStdInfo['MEAN']
+STD = meanStdInfo['STD']
+
+
+inputs = args.files
+
+
+# load the network used for classification
+print "# loading object",args.model
+network = utils.load_object(args.model,verbose=1)
+
+# process one file
+
+def process1(arg):
+    (trial,fname) = arg
+    base,_ = utils.allsplitext(fname)
+    line = cv2.imread(fname,0)
+
+    line = utils.prepare_line(line,args.pad)
+    line = (line -MEAN)/STD
+    pred = network.predictString(line)
+
+    print fname,":",pred
+    utils.write_text(base+".txt",pred)
+
+    return None
+
+
+for trial,fname in enumerate(inputs):
+    process1((trial,fname))

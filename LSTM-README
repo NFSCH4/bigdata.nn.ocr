@@ -1,0 +1,7 @@
+required packages: 
+
+	$ sudo apt-get install python-opencv python-scipy python-matplotlib
+
+to run the recognizer:
+
+	$ python ocropus-rpred --model model/raw-default-00125000.pyrnn.gz samples/*raw*png
