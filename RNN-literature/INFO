@@ -1,0 +1,12 @@
+Parts that we looked at in the meeting on 29 Oct 2015:
+
+- graves-lstm-sequence-learning-thesis.pdf
+
+    * Feed-forward network:        page 14
+    * recurrent neural network:    page 21
+    * LSTM memory cell:            page 34
+    * LSTM forward pass equations: page 38
+
+- benchmarking-LSTM-tmb-arxiv.pdf
+
+    * Application of LSTM to OCR:  page 2
